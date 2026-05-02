@@ -7,7 +7,7 @@ This system is designed to handle real-world workflows including lead tracking, 
 
 ## 🌐 Live Links
 
-- 🔗 **Live Application**: https://YOUR-VERCEL-LINK
+- 🔗 **Live Application**: https://gharpayy-crm-peach.vercel.app
 - 🔗 **Backend API**: https://gharpayy-crm-cglh.onrender.com
 - 🔗 **API Documentation**: https://gharpayy-crm-cglh.onrender.com/docs
 
