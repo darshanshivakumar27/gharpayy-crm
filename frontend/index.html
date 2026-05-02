@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gharpayy CRM</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f6fa;
+      padding: 20px;
+    }
+    h1 { color: #2f3640; }
+    .card {
+      background: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input {
+      padding: 8px;
+      margin: 5px;
+    }
+    button {
+      padding: 8px 12px;
+      background: #273c75;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🏢 Gharpayy CRM Dashboard</h1>
+
+<div class="card">
+  <h3>Add Lead</h3>
+  <input id="name" placeholder="Name">
+  <input id="phone" placeholder="Phone">
+  <input id="location" placeholder="Location">
+  <button onclick="addLead()">Add</button>
+</div>
+
+<div class="card">
+  <h3>📊 Dashboard</h3>
+  <p id="stats"></p>
+</div>
+
+<div class="card">
+  <h3>📋 Leads</h3>
+  <ul id="leads"></ul>
+</div>
+
+<script>
+const API = "http://127.0.0.1:8000";
+
+async function addLead() {
+  await fetch(`${API}/leads/`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      name: name.value,
+      phone: phone.value,
+      location: location.value
+    })
+  });
+  load();
+}
+
+async function load() {
+  const res = await fetch(`${API}/leads/`);
+  const data = await res.json();
+
+  leads.innerHTML = "";
+  data.forEach(l => {
+    leads.innerHTML += `
+      <li>
+        <b>${l.name}</b> (${l.location})  
+        <br>Status: ${l.status} | Assigned: ${l.assigned_to}
+        <br>
+        <button onclick="closeLead(${l.id})">Close</button>
+      </li><br>`;
+  });
+
+  const dash = await fetch(`${API}/dashboard/`);
+  const stats = await dash.json();
+
+  document.getElementById("stats").innerText =
+    `Total: ${stats.total_leads} | Closed: ${stats.closed_leads} | Pending: ${stats.pending_leads}`;
+}
+
+async function closeLead(id) {
+  await fetch(`${API}/leads/${id}`, {
+    method: "PUT",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({status: "Closed"})
+  });
+  load();
+}
+
+load();
+</script>
+
+</body>
+</html>
