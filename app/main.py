@@ -21,3 +21,6 @@ app.include_router(dashboard.router)
 @app.get("/")
 def root():
     return {"message": "CRM Running"}
+@app.get("/")
+def home():
+    return {"message": "Gharpayy CRM API is live"}
